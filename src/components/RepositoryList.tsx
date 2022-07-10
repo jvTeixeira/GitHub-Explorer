@@ -8,6 +8,7 @@ interface Repository{
   html_url: string;
   description: string;
   clone_url: string;
+  contributors_url: string;
 }
 
 export function RepositoryList() {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FiCopy } from "react-icons/fi";
 
@@ -8,12 +8,28 @@ interface RepositoryItemProps {
     html_url: string;
     description: string;
     clone_url: string;
+    contributors_url: string
   };
 }
 
+interface Users {
+  login: string;
+}
+
 export function RepositoryItem(props: RepositoryItemProps) {
+  const [logins, setLogins] = useState<Users[]>([]);
+
+  useEffect(() => {
+    fetch(
+      props.repository.contributors_url
+    )
+      .then((response) => response.json())
+      .then((data) => setLogins(data));
+  }),
+    [];
+
   return (
-    <li>
+    <li className="list-group-item">
       <div className="flex-box">
         <strong>{props.repository.name}</strong>
 
@@ -33,6 +49,10 @@ export function RepositoryItem(props: RepositoryItemProps) {
           </a>
         </div>
       </div>
+
+      {logins.map((login) => {
+        return <p key={login.login}> {login.login}</p>;
+      })}
     </li>
   );
 }
